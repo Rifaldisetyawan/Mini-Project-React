@@ -1,0 +1,12 @@
+{
+  "product": [
+    {
+      "name": "Asus ROG",
+      "quantity": "11",
+      "price": "1",
+      "image": "https://picsum.photos/200",
+      "productId": 1,
+      "id": 1
+    }
+  ]
+}
