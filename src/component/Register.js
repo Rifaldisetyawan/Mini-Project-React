@@ -48,7 +48,7 @@ const Register = ({ setLogout }) => {
 
     const handleRegister = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:3100/auth/register', {
+        axios.post('http://localhost:3100/users', {
             email,
             password,
             name,

@@ -1,7 +1,7 @@
-import {React, useEffect, useState} from 'react'
-import { Nav, Navbar, Container, FormControl, Button, InputGroup, Modal } from 'react-bootstrap'
+import { React, useEffect, useState } from 'react'
+import { Nav, Navbar, Container, Button, Modal } from 'react-bootstrap'
 import './NavbarComponent.css'
-import { BsFillBagPlusFill, BsSearch } from 'react-icons/bs'
+import { BsFillBagPlusFill } from 'react-icons/bs'
 import { IoLogOut, IoLogIn } from 'react-icons/io5'
 import AddProduct from './AddProduct'
 import axios from 'axios';
@@ -9,24 +9,43 @@ import { API_URL } from '../utils/constant'
 import swal from 'sweetalert'
 import { Link } from 'react-router-dom'
 
-const NavbarComponent = ({logoutUser, setLogout}) => {
+const NavbarComponent = ({ logoutUser, setLogout }) => {
     const [login, setLogin] = useState('')
-    useEffect(()=>{
+    useEffect(() => {
         hydrateStateWithLocalStorage()
-    },[logoutUser])
+    }, [logoutUser])
 
-    const logout = () =>{
-        localStorage.removeItem('login')
-        setLogout(true)
-        setLogin(true)
+    const logout = () => {
+        swal({
+            title: "Are you sure to Logout?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((logout) => {
+                if (logout) {
+                    swal({
+                        icon: "success",
+                        text: "Logout Success",
+                        buttons: false,
+                        timer: 700
+                    });
+                    setTimeout(function () {
+                        localStorage.removeItem('login')
+                        setLogout(true)
+                        setLogin(true)
+                    }, 800)
+                } else {
+                }
+            });
     }
-    const hydrateStateWithLocalStorage = () =>{
-        if(localStorage.hasOwnProperty('login')){
+    const hydrateStateWithLocalStorage = () => {
+        if (localStorage.hasOwnProperty('login')) {
             let value = localStorage.getItem('login')
-            try{
+            try {
                 value = JSON.parse(value)
                 setLogin(value)
-            }catch(e){
+            } catch (e) {
                 setLogin("")
             }
         }
@@ -39,7 +58,7 @@ const NavbarComponent = ({logoutUser, setLogout}) => {
     const handleClose = () => setShow(false);
 
     const handleAddProduct = (newProduct) => {
-        axios.post('http://localhost:3100/product',newProduct).then(() =>{
+        axios.post('http://localhost:3100/product', newProduct).then(() => {
             updateProduct()
         })
     }
@@ -50,72 +69,67 @@ const NavbarComponent = ({logoutUser, setLogout}) => {
                 title: "Success",
                 text: "Data sudah ditambahkan",
                 icon: "success",
-                button:false
-              });
-              setTimeout(function(){
+                button: false
+            });
+            setTimeout(function () {
                 window.location.reload(1);
-             }, 600);
+            }, 600);
         }).catch((error) => {
-          //error handle here
-          alert("Error:", error)
+            //error handle here
+            alert("Error:", error)
         })
-      }
+    }
 
 
     return (
         <>
-        <Container fluid className='navbar-main'>
-            <Container>
-                <div className='navbar'>
-                    <Navbar className='navbar-1'>
-                        <Nav>
-                            <Nav style={{ color: 'white' }}>Home Page</Nav>
-                        </Nav>
-                    </Navbar>
-                    <Navbar className='navbar-space'></Navbar>
-                    <Navbar className='navbar-2'>
-                        <Nav>
-                            {login && login.userLogin?
-                                <Button variant='outline-light' style={{'border':'none'}} onClick={logout}><IoLogOut style={{ 'font-size': '20px' }}/>Logout</Button>
-                            :
-                            
-                                <Link to='/login'><Button variant='outline-light' style={{'border':'none'}}><IoLogIn style={{ 'font-size': '20px' }}/>Login</Button></Link>
-                                
-                            }
-                        
-                        </Nav>
-                    </Navbar>
-                </div>
+            <Container fluid className='navbar-main'>
+                <Container>
+                    <div className='navbar'>
+                        <Navbar className='navbar-1'>
+                            <Nav>
+                                <Nav style={{ color: 'white' }}>Home Page</Nav>
+                            </Nav>
+                        </Navbar>
+                        <Navbar className='navbar-space'></Navbar>
+                        <Navbar className='navbar-2'>
+                            <Nav>
+                                {login && login.userLogin ?
+                                    <Button variant='outline-light' style={{ 'border': 'none' }} onClick={logout}><IoLogOut style={{ 'font-size': '20px' }} />Logout</Button>
+                                    :
 
-                <div className='navbar-second'>
-                    <Navbar className='navbar-3'>
-                        <Navbar.Brand>
-                            <img src='./assets/images/logo.png' alt=''></img>
-                        </Navbar.Brand>
-                    </Navbar>
-                    <Navbar className='navbar-search'>
-                        <InputGroup>
-                            <FormControl
-                                placeholder="Search.."
-                            />
-                            <Button variant="outline-light"><BsSearch /></Button>
-                        </InputGroup>
-                    </Navbar>
-                    <Navbar className='narbar-4'>
-                    {isLoginTrue && isLoginTrue.userLogin ?
-                        <>
-                        <Button onClick={handleShow}  variant="outline-light">
-                            <BsFillBagPlusFill style={{ 'font-size': '20px' }} /> 
-                        </Button>
-                        </>
-                        :
-                        null
-                    }
-                    </Navbar>
-                </div>
+                                    <Link to='/login'><Button variant='outline-light' style={{ 'border': 'none' }}><IoLogIn style={{ 'font-size': '20px' }} />Login</Button></Link>
+
+                                }
+
+                            </Nav>
+                        </Navbar>
+                    </div>
+
+                    <div className='navbar-second'>
+                        <Navbar className='navbar-3'>
+                            <Navbar.Brand>
+                                <img src='./assets/images/logo.png' alt=''></img>
+                            </Navbar.Brand>
+                        </Navbar>
+                        <Navbar className='navbar-search'>
+
+                        </Navbar>
+                        <Navbar className='narbar-4'>
+                            {isLoginTrue && isLoginTrue.userLogin ?
+                                <>
+                                    <Button onClick={handleShow} variant="outline-light">
+                                        <BsFillBagPlusFill style={{ 'font-size': '20px' }} />
+                                    </Button>
+                                </>
+                                :
+                                null
+                            }
+                        </Navbar>
+                    </div>
+                </Container>
             </Container>
-        </Container>
-        <Modal show={show} onHide={handleClose}>
+            <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Add Product</Modal.Title>
                 </Modal.Header>

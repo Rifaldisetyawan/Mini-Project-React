@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 
 const server = jsonServer.create()
 const router = jsonServer.router('./product_db.json')
-const userdb = JSON.parse(fs.readFileSync('./users.json', 'UTF-8'))
+const userdb = JSON.parse(fs.readFileSync('./product_db.json', 'UTF-8'))
 
 server.use(bodyParser.urlencoded({ extended: true }))
 server.use(bodyParser.json())
@@ -40,7 +40,7 @@ server.post('/auth/register', (req, res) => {
         res.status(status).json({ status, message })
         return
     }
-    fs.readFile("./users.json", (err, data) => {
+    fs.readFile("./product_db.json", (err, data) => {
         if (err) {
             const status = 401
             const message = err;
@@ -50,7 +50,7 @@ server.post('/auth/register', (req, res) => {
         data = JSON.parse(data.toString());
         let last_item_id = data.users[data.users.length - 1].id;
         data.users.push({ id: last_item_id +1, email: email, password: password, name: name, address: address, join_date: join_date, phone_number: phone_number })
-        let writeData = fs.writeFile("./users.json",
+        let writeData = fs.writeFile("./product_db.json",
             JSON.stringify(data),
             (err, result) => {
                 if (err) {

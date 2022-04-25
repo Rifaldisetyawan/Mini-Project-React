@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Container, Table, Button, Form, Modal } from 'react-bootstrap'
+import {BiEdit,BiTrash} from 'react-icons/bi'
 import './ListCategories.css'
 import axios from 'axios'
 import { API_URL } from '../utils/constant'
@@ -94,7 +95,7 @@ const ListCategories = () => {
             <div className='kategori'>
                 <h6 style={{ 'fontSize': '24px' }}>Product Data</h6>
                 <hr />
-                <Table striped bordered hover style={{ 'textAlign': 'center' }}>
+                <Table striped bordered hover style={{ 'textAlign': 'center','overflow':'auto','display':'block' }}>
 
                     <thead>
                         <tr>
@@ -114,8 +115,10 @@ const ListCategories = () => {
                                     <td>{post.name}</td>
                                     <td>{post.quantity}</td>
                                     <td>{post.price}</td>
-                                    <td>{post.image}</td>
-                                    <td><Button onClick={() => selectProduct(post.id)}>Edit</Button> || <Button onClick={() => deleteProduct(post.id)}>Delete</Button> </td>
+                                    <td>{post.image.length > 20 ?
+                                    `${post.image.substring(0, 15)}...` : post.image
+                                }</td>
+                                    <td><Button onClick={() => selectProduct(post.id)} variant={'warning'}><BiEdit/></Button>  <Button onClick={() => deleteProduct(post.id)} variant={'danger'}><BiTrash/></Button> </td>
                                 </tr>)
                         })}
 

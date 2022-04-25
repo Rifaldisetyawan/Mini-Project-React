@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { NavbarComponent, ListCategories, Menus, CarouselComponent, AlertComp } from "./index"
-import { Container, Row } from 'react-bootstrap'
+import { Container, Row, InputGroup, FormControl } from 'react-bootstrap'
 import './Home.css'
 import axios from 'axios'
 import { API_URL } from '../utils/constant'
+import Account from './Account'
 
 const Home = () => {
+    const [query, setQuery] = useState('')
+
     const [menus, setMenus] = useState([])
     const isLoginTrue = JSON.parse(localStorage.getItem("login"))
-    
-  const [logoutUser, setLogout]=useState(false)
+
+    const [logoutUser, setLogout] = useState(false)
 
 
     useEffect(() => {
@@ -17,7 +20,7 @@ const Home = () => {
     }, [])
 
     const updateProduct = () => {
-        
+
         axios.get(API_URL + 'product').then(response => {
             if (response.data.length > 0) {
                 setMenus(response.data)
@@ -48,20 +51,36 @@ const Home = () => {
                     </div>
                     {isLoginTrue && isLoginTrue.userLogin ?
                         <>
-                            <div className='mt-4' style={{ 'backgroundColor': 'white', 'borderRadius': '5px' }}>
+                            <div className='admin-container' >
+                                <div>
                                 <ListCategories />
+                                </div>
+                                <div>
+                                <Account />
+                                </div>
                             </div>
                             <div className="mt-4">
                                 <div className='kategori'>
                                     <h6 style={{ 'fontSize': '24px' }}>Product Catalogue</h6>
                                     <hr />
-                                    <Row>
-                                        {menus && menus.map((menu) => (
-                                            <Menus
-                                                key={menu.id}
-                                                menu={menu}
+                                    <InputGroup className='flex-container'>
+                                        <div>
+                                            <FormControl
+                                                className='search'
+                                                placeholder="Search.."
+                                                onChange={(e) => setQuery(e.target.value)}
                                             />
-                                        ))}
+                                        </div>
+
+                                    </InputGroup>
+                                    <Row>
+                                        {menus && menus.filter((menu) =>
+                                            menu.name.toLowerCase().includes(query)).map((menu) => (
+                                                <Menus
+                                                    key={menu.id}
+                                                    menu={menu}
+                                                />
+                                            ))}
                                     </Row>
                                 </div>
                             </div></>
@@ -71,13 +90,25 @@ const Home = () => {
                                 <div className='kategori'>
                                     <h6 style={{ 'fontSize': '24px' }}>Product Catalogue</h6>
                                     <hr />
-                                    <Row>
-                                        {menus && menus.map((menu) => (
-                                            <Menus
-                                                key={menu.id}
-                                                menu={menu}
+                                    <InputGroup className='flex-container'>
+                                        <div>
+                                            <FormControl
+                                                className='search'
+                                                placeholder="Search.."
+                                                onChange={(e) => setQuery(e.target.value)}
                                             />
-                                        ))}
+                                        </div>
+
+                                    </InputGroup>
+
+                                    <Row>
+                                        {menus && menus.filter((menu) =>
+                                            menu.name.toLowerCase().includes(query)).map((menu) => (
+                                                <Menus
+                                                    key={menu.id}
+                                                    menu={menu}
+                                                />
+                                            ))}
                                     </Row>
                                 </div>
                             </div>
